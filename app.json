@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "abc",
-    "slug": "abc",
+    "name": "apac",
+    "slug": "apac",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "abc",
+    "scheme": "apac",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
