@@ -20,7 +20,8 @@ const MAPPING = {
   'chevron.right': 'chevron-right',
   'info': 'info-outline',
   'message': 'message',
-  'setting': 'settings-suggest'
+  'setting': 'settings-suggest',
+  'left.arrow': 'keyboard-arrow-left'
 } as IconMapping;
 
 /**
