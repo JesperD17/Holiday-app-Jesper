@@ -5,11 +5,14 @@ import { Link } from "expo-router";
 export default function SettingScreen() {
     return (
         <>
-            <Link href='/' style={GlobalStyles.content}>
+            <Link href='/' style={GlobalStyles.headers}>
                 <IconSymbol size={28} name="left.arrow" style={GlobalStyles.icons} />
                 Setting's
             </Link>
-            <div>text</div>
+
+            <div style={GlobalStyles.default}>
+                <div>text</div>
+            </div>
         </>
     );
 }

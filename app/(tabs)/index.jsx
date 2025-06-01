@@ -3,11 +3,13 @@ import { GlobalStyles } from '@/constants/Global';
 export default function HomeScreen() {
   return (
     <>
-      <div style={GlobalStyles.content}>
+      <div style={GlobalStyles.headers}>
         Countdown
       </div>
-      
-      <div>text</div>
+
+      <div style={GlobalStyles.default}>
+        <div>text</div>
+      </div>
     </>
 
   );

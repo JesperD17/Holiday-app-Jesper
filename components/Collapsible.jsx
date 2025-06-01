@@ -7,7 +7,7 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 
 export function Collapsible({ children, title }) {
   const [isOpen, setIsOpen] = useState(false);
-  const theme = useColorScheme() ?? 'light';
+  const theme = useColorScheme() ?? 'dark';
 
   return (
     <ThemedView>

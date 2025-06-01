@@ -6,6 +6,7 @@ import { HapticTab } from '@/components/HapticTab';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
+import { GlobalStyles } from '@/constants/Global';
 import { useColorScheme } from '@/hooks/useColorScheme';
 
 export default function TabLayout() {
@@ -14,7 +15,7 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: Colors[colorScheme ?? 'dark'].tint,
         headerShown: false,
         tabBarButton: HapticTab,
         tabBarBackground: TabBarBackground,
@@ -22,9 +23,11 @@ export default function TabLayout() {
           ios: {
             position: 'absolute',
             height: 'auto',
+            padding: 10
           },
           default: {
-            height: 'auto',
+            height: '75px',
+            padding: 10
           },
         }),
       }}
@@ -34,6 +37,7 @@ export default function TabLayout() {
         options={{
           title: 'Home',
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          tabBarItemStyle: GlobalStyles.hidden,
         }}
       />
       <Tabs.Screen
