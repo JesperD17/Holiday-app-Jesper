@@ -25,10 +25,20 @@ export default function TabLayout() {
             height: 'auto',
             padding: 10
           },
-          default: {
-            height: '75px',
-            padding: 10
+          android: {
+            paddingTop: 10,
+            paddingBottom: 10,
+            bottom: 50,
+            height: 75,
+            width: 'auto',
+            backgroundColor: '#E9E9E9',
           },
+          default: {
+            height: 75,
+            padding: 10,
+            backgroundColor: '#E9E9E9',
+          },
+
         }),
       }}
     >
