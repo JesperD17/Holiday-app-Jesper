@@ -12,6 +12,7 @@ export const GlobalStyles = {
   default: {
     display: 'flex',
     margin: 10,
+    gap: 10,
     flexDirection: 'column'
   },
 

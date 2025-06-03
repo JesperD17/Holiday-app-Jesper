@@ -17,7 +17,7 @@ export default function CurrentLoc() {
 
             let location = await Location.getCurrentPositionAsync({});
             console.log(location);
-            
+
             setLocation(location);
         }
 
@@ -28,12 +28,20 @@ export default function CurrentLoc() {
     if (errorMsg) {
         text = errorMsg;
     } else if (location) {
-        text = JSON.stringify(location);
+        const { latitude, longitude } = location.coords;
+
+        if (latitude > 53.0) {
+            text = 'Region: North';
+        } else if (latitude >= 51.8) {
+            text = 'Region: Middle';
+        } else {
+            text = 'Region: South';
+        }
     }
 
     return (
         <Text>
-        {text}
+            {text}
         </Text>
     );
 }

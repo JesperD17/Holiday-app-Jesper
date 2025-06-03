@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
-import { Platform } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 
 import { HapticTab } from '@/components/HapticTab';
 import { IconSymbol } from '@/components/ui/IconSymbol';
@@ -29,9 +29,7 @@ export default function TabLayout() {
             android: {
               paddingTop: 10,
               paddingBottom: 10,
-              bottom: 50,
               height: 75,
-              width: 'auto',
               backgroundColor: '#E9E9E9',
             },
             default: {
@@ -73,6 +71,15 @@ export default function TabLayout() {
           }}
         />
       </Tabs>
+
+      <View style={styles.androidBox}></View>
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  androidBox: {
+    height: (Platform.OS === 'android') ? 50 : 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.45) '
+  }
+})
