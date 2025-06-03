@@ -1,17 +1,21 @@
+import CurrentLoc from '@/components/GetLocation';
 import { GlobalStyles } from '@/constants/Global';
 import { Text, View } from 'react-native';
-import CurrentLoc from '../../components/GetLocation';
 
 export default function HomeScreen() {
   return (
     <View>
-      <Text style={GlobalStyles.headers}>
-        Countdown
-      </Text>
+      <View style={GlobalStyles.headers}>
+        <Text style={GlobalStyles.headerSize}>
+          Countdown
+        </Text>
+      </View>
 
       <View style={GlobalStyles.default}>
         <CurrentLoc />
-        <Text>text</Text>
+        <Text>
+          text
+        </Text>
       </View>
     </View>
 

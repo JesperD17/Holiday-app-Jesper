@@ -1,17 +1,20 @@
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import { GlobalStyles } from '@/constants/Global';
 import { Link } from "expo-router";
-import { Image, StyleSheet, View } from 'react-native';
+import { Image, Platform, StyleSheet, Text, View } from 'react-native';
 
-import { Platform } from 'react-native';
-import CurrentLoc from '../../components/GetLocation';
+import CurrentLoc from '@/components/GetLocation';
 
 export default function AboutScreen() {
     return (
         <View>
-            <Link href='/' style={GlobalStyles.headers}>
-                <IconSymbol size={28} name="left.arrow" style={GlobalStyles.icons} />
-                About
+            <Link href='/' asChild>
+                <View style={GlobalStyles.headers}>
+                    <IconSymbol size={28} name="left.arrow" style={GlobalStyles.icons} />
+                    <Text style={GlobalStyles.headerSize}>
+                        About
+                    </Text>
+                </View>
             </Link>
 
             <View style={GlobalStyles.default}>

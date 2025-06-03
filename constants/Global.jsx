@@ -1,12 +1,12 @@
 import { Platform } from "react-native";
+
 export const GlobalStyles = {
   headers: {
     display: 'flex',
     alignItems: 'center',
+    flexDirection: 'row',
     margin: 10,
-    fontSize: 25,
-    marginTop: (Platform.OS === 'android') ? 30 : 0,
-    
+    marginTop: (Platform.OS === 'android') ? 40 : 10,
   },
 
   default: {
@@ -17,6 +17,10 @@ export const GlobalStyles = {
 
   icons: {
     fontSize: 40
+  },
+
+  headerSize: {
+    fontSize: 25
   },
 
   hidden: {
