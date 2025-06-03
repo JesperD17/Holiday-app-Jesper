@@ -3,23 +3,27 @@ import { Collapsible } from '@/components/Collapsible';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import { GlobalStyles } from '@/constants/Global';
 import { Link } from "expo-router";
-import { Text } from 'react-native';
+import { Text, View } from 'react-native';
 import CurrentLoc from '../../components/GetLocation';
 
 export default function HolidayScreen() {
   return (
-    <>
+    <View>
       <Link href='/' style={GlobalStyles.headers}>
         <IconSymbol size={28} name="left.arrow" style={GlobalStyles.icons} />
-        Holiday's
+        <Text>
+          Holiday's
+        </Text>
       </Link>
 
-      <Text style={GlobalStyles.default}>
+      <View style={GlobalStyles.default}>
         <CurrentLoc />
         <Collapsible title="collapsible content">
-          <>text</>
+          <Text>
+            text
+          </Text>
         </Collapsible>
-      </Text>
-    </>
+      </View>
+    </View>
   );
 }

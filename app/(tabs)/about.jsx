@@ -1,9 +1,9 @@
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import { GlobalStyles } from '@/constants/Global';
 import { Link } from "expo-router";
-import { StyleSheet, View } from 'react-native';
-import { Image } from 'react-native-web';
+import { Image, StyleSheet, View } from 'react-native';
 
+import { Platform } from 'react-native';
 import CurrentLoc from '../../components/GetLocation';
 
 export default function AboutScreen() {
@@ -21,23 +21,24 @@ export default function AboutScreen() {
                         source={require('@/assets/images/dev-black.png')}
                         style={styles.img}
                     />
-                    <a href='https://github.com/JesperD17/Holiday-app-Jesper'
+                    <Link href='https://github.com/JesperD17/Holiday-app-Jesper'
                         target="_blank"
                         style={styles.text}>
                         ℗ 2025 Jesper Drent
-                    </a>
+                    </Link>
                 </View>
             </View>
         </View>
     );
 }
 
+
 const styles = StyleSheet.create({
     wrapper: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        height: '55vh',
+        height: (Platform.OS === 'android') ? 400 : '55vh',
         flexDirection: 'column',
         gap: 10,
     },
@@ -49,6 +50,7 @@ const styles = StyleSheet.create({
     },
 
     text: {
-        color: 'black'
+        color: 'black',
+        textDecorationLine: 'underline'
     }
 })

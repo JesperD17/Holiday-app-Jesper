@@ -3,8 +3,7 @@ import { IconSymbol } from '@/components/ui/IconSymbol';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { useState } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
-import { View } from 'react-native-web';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 export function Collapsible({ children, title }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,7 +23,7 @@ export function Collapsible({ children, title }) {
           style={{ transform: [{ rotate: isOpen ? '90deg' : '0deg' }] }}
         />
 
-        <View type="defaultSemiBold">{title}</View>
+        <Text type="defaultSemiBold">{title}</Text>
       </TouchableOpacity>
       {isOpen && <ThemedView style={styles.content}>{children}</ThemedView>}
     </ThemedView>
