@@ -7,7 +7,7 @@ import CurrentLoc from '@/components/GetLocation';
 
 export default function AboutScreen() {
     return (
-        <View>
+        <View style={{ flex: 1 }}>
             <Link href='/' asChild>
                 <Pressable style={GlobalStyles.headers}>
                     <IconSymbol size={28} name="left.arrow" style={GlobalStyles.icons} />
@@ -18,7 +18,9 @@ export default function AboutScreen() {
             </Link>
 
             <View style={GlobalStyles.default}>
-                <CurrentLoc />
+                <Text>
+                    <CurrentLoc />
+                </Text>
                 <View style={styles.wrapper}>
                     <Image
                         source={require('@/assets/images/dev-black.png')}

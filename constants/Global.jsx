@@ -13,7 +13,8 @@ export const GlobalStyles = {
     display: 'flex',
     margin: 10,
     gap: 10,
-    flexDirection: 'column'
+    flexDirection: 'column',
+    flex: 1
   },
 
   icons: {

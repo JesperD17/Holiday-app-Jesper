@@ -4,7 +4,7 @@ import { Text, View } from 'react-native';
 
 export default function HomeScreen() {
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <View style={GlobalStyles.headers}>
         <Text style={GlobalStyles.headerSize}>
           Countdown
@@ -12,7 +12,9 @@ export default function HomeScreen() {
       </View>
 
       <View style={GlobalStyles.default}>
-        <CurrentLoc />
+        <Text>
+          <CurrentLoc />
+        </Text>
         <Text>
           text
         </Text>

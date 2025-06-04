@@ -9,7 +9,7 @@ export default function SettingScreen() {
 
 
     return (
-        <View>
+        <View style={{ flex: 1 }}>
             <Link href='/' asChild>
                 <Pressable style={GlobalStyles.headers}>
                     <IconSymbol size={28} name="left.arrow" style={GlobalStyles.icons} />

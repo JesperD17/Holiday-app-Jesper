@@ -1,6 +1,5 @@
 import * as Location from 'expo-location';
 import { useEffect, useState } from "react";
-import { Text } from 'react-native';
 
 export default function CurrentLoc() {
     const [location, setLocation] = useState(null);
@@ -20,7 +19,6 @@ export default function CurrentLoc() {
 
             setLocation(location);
         }
-
         getCurrentLocation();
     }, []);
 
@@ -39,9 +37,5 @@ export default function CurrentLoc() {
         }
     }
 
-    return (
-        <Text>
-            {text}
-        </Text>
-    );
+    return text;
 }
