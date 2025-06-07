@@ -1,27 +1,38 @@
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import { GlobalStyles } from '@/constants/Global';
 import { Link } from "expo-router";
-import { Image, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Image, Platform, Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 
 import CurrentLoc from '@/components/GetLocation';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function AboutScreen() {
+    const insets = useSafeAreaInsets();
+    const global = GlobalStyles(insets);
+
+    const { width, height } = useWindowDimensions();
+    const isPortrait = height >= width;
+
+    const portraitHeight = isPortrait
+  ? (Platform.OS === 'android' ? 400 : height * 0.55) // portrait
+  : (Platform.OS === 'android' ? 125 : height * 0.3); // landscape
+
     return (
-        <View style={{ flex: 1 }}>
+        <View style={global.uiPaddingPages}>
             <Link href='/' asChild>
-                <Pressable style={GlobalStyles.headers}>
-                    <IconSymbol size={28} name="left.arrow" style={GlobalStyles.icons} />
-                    <Text style={GlobalStyles.headerSize}>
+                <Pressable style={global.headers}>
+                    <IconSymbol size={28} name="left.arrow" style={global.icons} />
+                    <Text style={global.headerSize}>
                         About
                     </Text>
                 </Pressable>
             </Link>
 
-            <View style={GlobalStyles.default}>
+            <View style={global.default}>
                 <Text>
                     <CurrentLoc />
                 </Text>
-                <View style={styles.wrapper}>
+                <View style={[styles.wrapper, { height: portraitHeight }]}>
                     <Image
                         source={require('@/assets/images/dev-black.png')}
                         style={styles.img}
@@ -43,7 +54,6 @@ const styles = StyleSheet.create({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        height: (Platform.OS === 'android') ? 400 : '55vh',
         flexDirection: 'column',
         gap: 10,
     },

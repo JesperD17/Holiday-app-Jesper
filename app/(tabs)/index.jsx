@@ -1,17 +1,20 @@
 import CurrentLoc from '@/components/GetLocation';
 import { GlobalStyles } from '@/constants/Global';
 import { Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function HomeScreen() {
+  const insets = useSafeAreaInsets();
+  const global = GlobalStyles(insets);
   return (
-    <View style={{ flex: 1 }}>
-      <View style={GlobalStyles.headers}>
-        <Text style={GlobalStyles.headerSize}>
+    <View style={global.uiPaddingPages}>
+      <View style={global.headers}>
+        <Text style={global.headerSize}>
           Countdown
         </Text>
       </View>
 
-      <View style={GlobalStyles.default}>
+      <View style={global.default}>
         <Text>
           <CurrentLoc />
         </Text>
@@ -20,6 +23,5 @@ export default function HomeScreen() {
         </Text>
       </View>
     </View>
-
   );
 }   

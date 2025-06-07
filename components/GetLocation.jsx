@@ -1,7 +1,7 @@
 import * as Location from 'expo-location';
 import { useEffect, useState } from "react";
 
-export default function CurrentLoc() {
+export default function useCurrentLoc() {
     const [location, setLocation] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
 

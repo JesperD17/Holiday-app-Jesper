@@ -1,6 +1,6 @@
 import { Platform } from "react-native";
 
-export const GlobalStyles = {
+export const GlobalStyles = (insets) => ({
   headers: {
     display: 'flex',
     alignItems: 'center',
@@ -28,4 +28,10 @@ export const GlobalStyles = {
   hidden: {
     display: 'none'
   },
-};
+
+  uiPaddingPages: {
+    paddingLeft: insets.left,
+    paddingRight: insets.right,
+    flex: 1,
+  }
+})

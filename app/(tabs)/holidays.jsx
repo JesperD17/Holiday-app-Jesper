@@ -1,35 +1,74 @@
 
-import { Collapsible } from '@/components/Collapsible';
-import CurrentLoc from '@/components/GetLocation';
+import useCurrentLoc from '@/components/GetLocation';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import { GlobalStyles } from '@/constants/Global';
 import { Link } from 'expo-router';
 
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, Pressable, Text, View } from 'react-native';
-
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function HolidayScreen() {
+  const insets = useSafeAreaInsets();
+  const global = GlobalStyles(insets);
+
+  const { width, height } = useWindowDimensions();
+  const isPortrait = height <= width;
+
   const [isLoading, setLoading] = useState(true);
-  const [data, setData] = useState([]);
+  const [holidays, setHolidays] = useState([]);
+  const [years, setYears] = useState([])
+  const currentLoc = useCurrentLoc();
+  console.log(currentLoc);
 
   useEffect(() => {
-    const fetchMovies = async () => {
-      await <CurrentLoc />
+    if (currentLoc === 'Waiting...') return;
+
+    const regionMap = {
+      'Region: Middle': 'midden',
+      'Region: North': 'noord',
+      'Region: South': 'zuid',
+    };
+    const regionKey = regionMap[currentLoc];
+
+    const fetchHolidays = async () => {
       try {
         const response = await fetch('https://opendata.rijksoverheid.nl/v1/sources/rijksoverheid/infotypes/schoolholidays/schoolyear/2024-2025?output=json');
         const json = await response.json();
-        console.log(json?.content?.[0]?.vacations);
-        
-        setData(json?.content?.[0]?.vacations);
-      } catch (error) {
-        console.error("Fetch error:", error);
+        const items = json?.content?.[0]?.vacations;
+        setYears(json?.content?.[0].schoolyear.trim?.());
+
+        const enrichedData = items.map(item => {
+          const startDateStr = getDateByRegion(item.regions, regionKey, 'startdate');
+          const endDateStr = getDateByRegion(item.regions, regionKey, 'enddate');
+
+          return {
+            type: item.type.trim(),
+            startDate: startDateStr ? new Date(startDateStr).toLocaleDateString('nl',
+              { year: 'numeric', month: 'long', day: 'numeric' }) : '',
+            endDate: endDateStr ? new Date(endDateStr).toLocaleDateString('nl',
+              { year: 'numeric', month: 'long', day: 'numeric' }) : '',
+          };
+        });
+
+        setHolidays(enrichedData);
+      } catch (err) {
+        console.error("Fetch error:", err);
       } finally {
         setLoading(false);
       }
     };
-    fetchMovies();
-  }, []);
+
+    fetchHolidays();
+  }, [currentLoc]);
+
+  const getDateByRegion = (regions, regionKey, type) => {
+    return (
+      regions.find(r => r.region === regionKey)?.[type] ||
+      regions.find(r => r.region === 'heel Nederland')?.[type] ||
+      ''
+    );
+  };
 
   if (isLoading) {
     return (
@@ -39,46 +78,57 @@ export default function HolidayScreen() {
     );
   }
 
-  console.log(<CurrentLoc />);
-  
-
   return (
-    <View style={{ flex: 1 }}>
-      <Link href='/' asChild>
-        <Pressable style={GlobalStyles.headers}>
-          <IconSymbol size={28} name="left.arrow" style={GlobalStyles.icons} />
-          <Text style={GlobalStyles.headerSize}>
-            Holiday's
-          </Text>
-        </Pressable>
-      </Link>
+    <View style={global.uiPaddingPages}>
+      <ScrollView>
+        <Link href='/' asChild>
+          <Pressable style={global.headers}>
+            <IconSymbol size={28} name="left.arrow" style={global.icons} />
+            <Text style={global.headerSize}>
+              Holiday's
+            </Text>
+          </Pressable>
+        </Link>
 
-      <View style={GlobalStyles.default}>
-        <Text>
-          <CurrentLoc />
-        </Text>
-        <Collapsible title="collapsible content">
+        <View style={global.default}>
           <Text>
-            text
+            {currentLoc}
           </Text>
-        </Collapsible>
+          <Text style={{ fontWeight: 'bold' }}>
+            {years}
+          </Text>
 
-        <View style={{ flex: 1, padding: 16 }}>
-          <FlatList
-            data={data}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => (
-              <Text style={{ fontSize: 18, marginBottom: 12 }}>
-                {item?.type.trim() || 'API error'},
-                {item?.regions?.find(r => r.region === CurrentLoc)?.startdate || 
-                item?.regions?.find(r => r.region === 'heel Nederland')?.startdate ||
-                'Cannot find region'}
-              </Text>
-            )}
-          />
+          <View style={[isPortrait && styles.portraitWrapper]}>
+            {holidays.map((item, index) => (
+              <View key={index.toString()} style={styles.holidayAligment}>
+                <Text style={{ fontWeight: 'bold' }}>{item.type}</Text>
+                <Text>Start: {item.startDate || 'N/A'}</Text>
+                <Text>End: {item.endDate || 'N/A'}</Text>
+              </View>
+            ))}
+          </View>
+
         </View>
+      </ScrollView>
 
-      </View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  holidayAligment: {
+    marginTop: 10,
+    padding: 10,
+    borderColor: '#000000',
+    borderWidth: 2,
+    borderRadius: 12,
+    width: '48%',
+  },
+
+  portraitWrapper: {
+    overflow: 'unset',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+  },
+})
