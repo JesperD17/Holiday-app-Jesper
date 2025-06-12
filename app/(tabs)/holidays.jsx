@@ -100,7 +100,7 @@ export default function HolidayScreen() {
 
           <View style={[isPortrait && styles.portraitWrapper]}>
             {holidays.map((item, index) => (
-              <View key={index.toString()} style={styles.holidayAligment}>
+              <View key={index.toString()} style={[styles.holidayAligment, isPortrait && styles.portraitBox]}>
                 <Text style={{ fontWeight: 'bold' }}>{item.type}</Text>
                 <Text>Start: {item.startDate || 'N/A'}</Text>
                 <Text>End: {item.endDate || 'N/A'}</Text>
@@ -110,7 +110,6 @@ export default function HolidayScreen() {
 
         </View>
       </ScrollView>
-
     </View>
   );
 }
@@ -122,13 +121,16 @@ const styles = StyleSheet.create({
     borderColor: '#000000',
     borderWidth: 2,
     borderRadius: 12,
-    width: '48%',
   },
-
+  
   portraitWrapper: {
     overflow: 'unset',
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 10,
   },
+
+  portraitBox: {
+    width: '48%',
+  }
 })
