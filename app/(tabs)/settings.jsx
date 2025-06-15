@@ -5,8 +5,7 @@ import { Pressable, Text } from 'react-native';
 
 import CurrentLoc from '@/components/GetLocation';
 import { FontAwesome } from '@expo/vector-icons';
-import { AsyncStorage } from 'react-native';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
@@ -25,30 +24,22 @@ export default function SettingScreen() {
     const [selected, setSelected] = useState("");
     const [userChanged, setUserChanged] = useState(false);
 
-    // Load stored selection or set based on CurrentLoc
     useEffect(() => {
         const init = async () => {
             const saved = await AsyncStorage.getItem('region');
             if (saved) {
-                console.log('a');
-                
                 setSelected(saved);
             } else {
-                console.log('b');
-
-                const current = await CurrentLoc(); // Ensure this returns a promise resolving to the region name
+                const current = await CurrentLoc();
                 setSelected(current);
             }
         };
         init();
     }, []);
 
-    // Save to AsyncStorage only if user changed
     useEffect(() => {
         const saveToStorage = async () => {
             if (userChanged) {
-                console.log(AsyncStorage, 'a');
-
                 await AsyncStorage.setItem('region', selected);
             }
         };
@@ -70,6 +61,7 @@ export default function SettingScreen() {
             </Link>
 
             <Text style={global.default}>
+                {CurrentLoc}
                 <SelectList
                     setSelected={handleUserSelect}
                     data={data}
@@ -77,7 +69,7 @@ export default function SettingScreen() {
                     arrowicon={<FontAwesome name="chevron-down" size={12} color={'black'} />}
                     search={false}
                     boxStyles={{ borderRadius: 8 }}
-                    defaultOption={data.find(d => d.value === selected)}
+                    defaultOption={data[Number(selected)]}
                 />
             </Text>
         </View>
