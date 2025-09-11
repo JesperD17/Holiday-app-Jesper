@@ -1,5 +1,5 @@
 import CurrentLoc from '@/components/GetLocation';
-import { GlobalStyles } from '@/constants/Global';
+import { GlobalStyles } from '@/constants/GlobalStyles';
 import { Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 

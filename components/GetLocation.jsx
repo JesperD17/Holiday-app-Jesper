@@ -1,4 +1,5 @@
 import { useRegion } from "@/components/RegionContext";
+import data from "@/constants/RegionData";
 import * as Location from "expo-location";
 import { useEffect, useState } from "react";
 
@@ -11,7 +12,7 @@ export default function useCurrentLoc() {
     async function getCurrentLocation() {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
-        setErrorMsg("Permission to access location was denied");
+        setErrorMsg("Toegang tot de locatie is geweigerd");
         return;
       }
 
@@ -24,22 +25,21 @@ export default function useCurrentLoc() {
   let text = "Waiting...";
 
   if (!region) {
-    console.log('a', region)
     if (errorMsg) {
       text = errorMsg;
     } else if (location) {
       const { latitude } = location.coords;
       if (latitude > 53.0) {
-        text = "Region: North";
+        text = "Regio: Noord";
       } else if (latitude >= 51.8) {
-        text = "Region: Middle";
+        text = "Regio: Midden";
       } else {
-        text = "Region: South";
+        text = "Regio: Zuid";
       }
     }
   } else {
-    text = region;
+    const regionObj = data.find(item => item.key === String(region));
+    text = `Regio: ${regionObj?.value || region}`;
   }
-
-  return text += 'aa';
+  return text;
 }

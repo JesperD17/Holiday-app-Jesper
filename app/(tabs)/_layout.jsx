@@ -7,7 +7,7 @@ import { RegionProvider } from '@/components/RegionContext';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
-import { GlobalStyles } from '@/constants/Global';
+import { GlobalStyles } from '@/constants/GlobalStyles';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -50,7 +50,7 @@ export default function TabLayout() {
           <Tabs.Screen
             name="index"
             options={{
-              title: 'Home',
+              title: 'Thuis',
               tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
               tabBarItemStyle: global.hidden,
             }}
@@ -58,21 +58,21 @@ export default function TabLayout() {
           <Tabs.Screen
             name="holidays"
             options={{
-              title: `Holiday's`,
+              title: `Vakanties`,
               tabBarIcon: ({ color }) => <IconSymbol size={28} name="info" color={color} />,
             }}
           />
           <Tabs.Screen
             name="about"
             options={{
-              title: 'About',
+              title: 'Over ons',
               tabBarIcon: ({ color }) => <IconSymbol size={28} name="message" color={color} />,
             }}
           />
           <Tabs.Screen
             name="settings"
             options={{
-              title: 'Settings',
+              title: 'Instellingen',
               tabBarIcon: ({ color }) => <IconSymbol size={28} name="setting" color={color} />,
             }}
           />

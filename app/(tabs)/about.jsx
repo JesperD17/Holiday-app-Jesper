@@ -1,5 +1,5 @@
 import { IconSymbol } from '@/components/ui/IconSymbol';
-import { GlobalStyles } from '@/constants/Global';
+import { GlobalStyles } from '@/constants/GlobalStyles';
 import { Link } from "expo-router";
 import { Image, Platform, Pressable, ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 
@@ -24,7 +24,7 @@ export default function AboutScreen() {
                     <Pressable style={global.headers}>
                         <IconSymbol size={28} name="left.arrow" style={global.icons} />
                         <Text style={global.headerSize}>
-                            About
+                            Over ons
                         </Text>
                     </Pressable>
                 </Link>

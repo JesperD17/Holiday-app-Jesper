@@ -1,7 +1,7 @@
 
 import useCurrentLoc from '@/components/GetLocation';
 import { IconSymbol } from '@/components/ui/IconSymbol';
-import { GlobalStyles } from '@/constants/Global';
+import { GlobalStyles } from '@/constants/GlobalStyles';
 import { Link } from 'expo-router';
 
 import { useEffect, useState } from 'react';
@@ -19,21 +19,18 @@ export default function HolidayScreen() {
   const [holidays, setHolidays] = useState([]);
   const [years, setYears] = useState([])
   const currentLoc = useCurrentLoc();
-  console.log(currentLoc);
+
+  const today = new Date();
+  const year = today.getFullYear();
 
   useEffect(() => {
-    if (currentLoc === 'Waiting...') return;
-
-    const regionMap = {
-      'Region: Middle': 'midden',
-      'Region: North': 'noord',
-      'Region: South': 'zuid',
-    };
-    const regionKey = regionMap[currentLoc];
+    if (currentLoc === 'Laden...') return;
+    const parts = currentLoc.split(" ");
+    const regionKey = parts[1].charAt(0).toLowerCase() + parts[1].slice(1);
 
     const fetchHolidays = async () => {
       try {
-        const response = await fetch('https://opendata.rijksoverheid.nl/v1/sources/rijksoverheid/infotypes/schoolholidays/schoolyear/2024-2025?output=json');
+        const response = await fetch(`https://opendata.rijksoverheid.nl/v1/sources/rijksoverheid/infotypes/schoolholidays/schoolyear/${year}-${year+1}?output=json`);
         const json = await response.json();
         const items = json?.content?.[0]?.vacations;
         setYears(json?.content?.[0].schoolyear.trim?.());
@@ -85,7 +82,7 @@ export default function HolidayScreen() {
           <Pressable style={global.headers}>
             <IconSymbol size={28} name="left.arrow" style={global.icons} />
             <Text style={global.headerSize}>
-              Holiday's
+              Vakanties
             </Text>
           </Pressable>
         </Link>
@@ -103,7 +100,7 @@ export default function HolidayScreen() {
               <View key={index.toString()} style={[styles.holidayAligment, isPortrait && styles.portraitBox]}>
                 <Text style={{ fontWeight: 'bold' }}>{item.type}</Text>
                 <Text>Start: {item.startDate || 'N/A'}</Text>
-                <Text>End: {item.endDate || 'N/A'}</Text>
+                <Text>Eind: {item.endDate || 'N/A'}</Text>
               </View>
             ))}
           </View>
