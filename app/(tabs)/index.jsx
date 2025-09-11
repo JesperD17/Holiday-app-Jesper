@@ -10,7 +10,7 @@ export default function HomeScreen() {
     <View style={global.uiPaddingPages}>
       <View style={global.headers}>
         <Text style={global.headerSize}>
-          Countdown
+          Aftellen
         </Text>
       </View>
 

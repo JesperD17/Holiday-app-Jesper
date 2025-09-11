@@ -1,5 +1,5 @@
 import { useRegion } from "@/components/RegionContext";
-import data from "@/constants/RegionData";
+import { data } from "@/constants/GlobalJson";
 import * as Location from "expo-location";
 import { useEffect, useState } from "react";
 
@@ -22,7 +22,7 @@ export default function useCurrentLoc() {
     getCurrentLocation();
   }, []);
 
-  let text = "Waiting...";
+  let text = "Laden...";
 
   if (!region) {
     if (errorMsg) {
