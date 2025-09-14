@@ -1,11 +1,13 @@
 
 import useCurrentLoc from '@/components/GetLocation';
 import { IconSymbol } from '@/components/ui/IconSymbol';
+import { yearsJson } from "@/constants/GlobalJson";
 import { GlobalStyles } from '@/constants/GlobalStyles';
+import { FontAwesome } from "@expo/vector-icons";
 import { Link } from 'expo-router';
-
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { SelectList } from "react-native-dropdown-select-list";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function HolidayScreen() {
@@ -91,6 +93,21 @@ export default function HolidayScreen() {
           <Text>
             {currentLoc}
           </Text>
+
+          <SelectList
+            setSelected={years}
+            data={yearsJson}
+            save="value"
+            // defaultOption={data.find((d) => d.value === region)}
+            arrowicon={<FontAwesome name="chevron-down" size={12} color="black" />}
+            search={false}
+            boxStyles={{
+                // maxWidth: 400,
+                borderRadius: 8
+            }}
+            placeholder="Kies een schooljaar"
+          />
+
           <Text style={{ fontWeight: 'bold' }}>
             {years}
           </Text>

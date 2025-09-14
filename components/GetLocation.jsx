@@ -1,5 +1,5 @@
 import { useRegion } from "@/components/RegionContext";
-import { data } from "@/constants/GlobalJson";
+import { regionsJson } from "@/constants/GlobalJson";
 import * as Location from "expo-location";
 import { useEffect, useState } from "react";
 
@@ -38,7 +38,7 @@ export default function useCurrentLoc() {
       }
     }
   } else {
-    const regionObj = data.find(item => item.key === String(region));
+    const regionObj = regionsJson.find(item => item.key === String(region));
     text = `Regio: ${regionObj?.value || region}`;
   }
   return text;

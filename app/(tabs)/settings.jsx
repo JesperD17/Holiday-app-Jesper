@@ -1,7 +1,7 @@
 import CurrentLoc from '@/components/GetLocation';
 import { useRegion } from "@/components/RegionContext";
 import { IconSymbol } from "@/components/ui/IconSymbol";
-import { data } from "@/constants/GlobalJson";
+import { regionsJson } from "@/constants/GlobalJson";
 import { GlobalStyles } from "@/constants/GlobalStyles";
 import { FontAwesome } from "@expo/vector-icons";
 import { Link } from "expo-router";
@@ -30,9 +30,9 @@ export default function SettingScreen() {
                     </Text>
                     <SelectList
                         setSelected={updateRegion}
-                        data={data}
+                        data={regionsJson}
                         save="value"
-                        defaultOption={data.find((d) => d.value === region)}
+                        defaultOption={regionsJson.find((d) => d.value === region)}
                         arrowicon={<FontAwesome name="chevron-down" size={12} color="black" />}
                         search={false}
                         boxStyles={{

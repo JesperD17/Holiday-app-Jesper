@@ -1,4 +1,4 @@
-import { data } from "@/constants/GlobalJson";
+import { regionsJson } from "@/constants/GlobalJson";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from "react";
 
@@ -9,7 +9,7 @@ export default function useStoredLocation() {
         const init = async () => {
             const saved = await AsyncStorage.getItem('region');
             if (saved) {
-                const found = data.find(d => d.key === saved);
+                const found = regionsJson.find(d => d.key === saved);
                 setStoredLoc(found ? found.value : null);
             } else {
                 setStoredLoc(null);
