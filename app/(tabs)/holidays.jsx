@@ -1,6 +1,7 @@
-
+import useFetchHolidays from '@/components/fetchHolidays';
 import useCurrentLoc from '@/components/GetLocation';
 import { IconSymbol } from '@/components/ui/IconSymbol';
+import { useYear } from '@/components/YearContext';
 import { yearsJson } from "@/constants/GlobalJson";
 import { GlobalStyles } from '@/constants/GlobalStyles';
 import { FontAwesome } from "@expo/vector-icons";
@@ -17,16 +18,16 @@ export default function HolidayScreen() {
   const { width, height } = useWindowDimensions();
   const isPortrait = height <= width;
 
-  const [isLoading, setLoading] = useState(true);
-  const [holidays, setHolidays] = useState([]);
-  const [years, setYears] = useState([])
   const [selectedYear, setSelectedYear] = useState(null);
   
   const currentLoc = useCurrentLoc();
 
+  const { year, updateYear } = useYear();
+
   const today = new Date();
-  const year = today.getFullYear();
-  let yearReqHtml = `${year}-${year+1}`;
+  const yearDefault = `${today.getFullYear()}-${today.getFullYear()+1}`;
+
+  const { fetchHolidays, isLoading, holidays, years } = useFetchHolidays();
 
   const computeRegionKey = (loc) => {
     if (!loc || loc === 'Laden...') return 'heel Nederland';
@@ -35,59 +36,11 @@ export default function HolidayScreen() {
     return parts[1].charAt(0).toLowerCase() + parts[1].slice(1);
   };
 
-  const fetchHolidays = async (newYearReq, regionKeyParam) => {
-    const yearToUse = newYearReq || yearReqHtml;
-    const regionKey = regionKeyParam || computeRegionKey(currentLoc);
-    try {
-      setLoading(true);
-      const response = await fetch(`https://opendata.rijksoverheid.nl/v1/sources/rijksoverheid/infotypes/schoolholidays/schoolyear/${yearToUse}?output=json`);
-      const json = await response.json();
-      const items = json?.content?.[0]?.vacations || [];
-      const schoolyear = json?.content?.[0]?.schoolyear?.trim?.() || '';
-      setYears(schoolyear);
-
-      const enrichedData = items.map(item => {
-        const startDateStr = getDateByRegion(item.regions, regionKey, 'startdate');
-        const endDateStr = getDateByRegion(item.regions, regionKey, 'enddate');
-
-        return {
-          type: item.type.trim(),
-          startDate: startDateStr ? new Date(startDateStr).toLocaleDateString('nl',
-            { year: 'numeric', month: 'long', day: 'numeric' }) : '',
-          endDate: endDateStr ? new Date(endDateStr).toLocaleDateString('nl',
-            { year: 'numeric', month: 'long', day: 'numeric' }) : '',
-        };
-      });
-
-      setHolidays(enrichedData);
-    } catch (err) {
-      console.error("Fetch error:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
     if (currentLoc === 'Laden...') return;
     const regionKey = computeRegionKey(currentLoc);
-
-    fetchHolidays(yearReqHtml, regionKey);
-  }, [currentLoc]);
-
-  useEffect(() => {
-    if (!selectedYear) return;
-    if (currentLoc === 'Laden...') return;
-    const regionKey = computeRegionKey(currentLoc);
-    fetchHolidays(selectedYear, regionKey);
-  }, [selectedYear, currentLoc]);
-
-  const getDateByRegion = (regions, regionKey, type) => {
-    return (
-      regions.find(r => r.region === regionKey)?.[type] ||
-      regions.find(r => r.region === 'heel Nederland')?.[type] ||
-      ''
-    );
-  };
+    fetchHolidays(year || yearDefault, regionKey);
+  }, [currentLoc, year]);
 
   return (
     <View style={global.uiPaddingPages}>
@@ -114,7 +67,7 @@ export default function HolidayScreen() {
           </Text>
 
           <SelectList
-            setSelected={(val) => setSelectedYear(val)}
+            setSelected={(val) => updateYear(val)}
             data={yearsJson}
             save="value"
             arrowicon={<FontAwesome name="chevron-down" size={12} color="black" />}
