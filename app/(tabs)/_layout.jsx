@@ -4,6 +4,7 @@ import { Platform } from 'react-native';
 
 import { HapticTab } from '@/components/HapticTab';
 import { RegionProvider } from '@/components/RegionContext';
+import { YearProvider } from '@/components/YearContext';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
@@ -19,6 +20,7 @@ export default function TabLayout() {
   return (
     <SafeAreaProvider style={{ paddingBottom: insets.bottom, backgroundColor: 'grey' }}>
       <RegionProvider >
+        <YearProvider>
         <Tabs
           screenOptions={{
             tabBarActiveTintColor: Colors[colorScheme ?? 'dark'].tint,
@@ -77,6 +79,7 @@ export default function TabLayout() {
             }}
           />
         </Tabs>
+        </YearProvider>
       </RegionProvider>
     </SafeAreaProvider>
   );

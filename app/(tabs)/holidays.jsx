@@ -20,46 +20,66 @@ export default function HolidayScreen() {
   const [isLoading, setLoading] = useState(true);
   const [holidays, setHolidays] = useState([]);
   const [years, setYears] = useState([])
+  const [selectedYear, setSelectedYear] = useState(null);
+  
   const currentLoc = useCurrentLoc();
 
   const today = new Date();
   const year = today.getFullYear();
+  let yearReqHtml = `${year}-${year+1}`;
+
+  const computeRegionKey = (loc) => {
+    if (!loc || loc === 'Laden...') return 'heel Nederland';
+    const parts = loc.split(" ");
+    if (!parts[1]) return 'heel Nederland';
+    return parts[1].charAt(0).toLowerCase() + parts[1].slice(1);
+  };
+
+  const fetchHolidays = async (newYearReq, regionKeyParam) => {
+    const yearToUse = newYearReq || yearReqHtml;
+    const regionKey = regionKeyParam || computeRegionKey(currentLoc);
+    try {
+      setLoading(true);
+      const response = await fetch(`https://opendata.rijksoverheid.nl/v1/sources/rijksoverheid/infotypes/schoolholidays/schoolyear/${yearToUse}?output=json`);
+      const json = await response.json();
+      const items = json?.content?.[0]?.vacations || [];
+      const schoolyear = json?.content?.[0]?.schoolyear?.trim?.() || '';
+      setYears(schoolyear);
+
+      const enrichedData = items.map(item => {
+        const startDateStr = getDateByRegion(item.regions, regionKey, 'startdate');
+        const endDateStr = getDateByRegion(item.regions, regionKey, 'enddate');
+
+        return {
+          type: item.type.trim(),
+          startDate: startDateStr ? new Date(startDateStr).toLocaleDateString('nl',
+            { year: 'numeric', month: 'long', day: 'numeric' }) : '',
+          endDate: endDateStr ? new Date(endDateStr).toLocaleDateString('nl',
+            { year: 'numeric', month: 'long', day: 'numeric' }) : '',
+        };
+      });
+
+      setHolidays(enrichedData);
+    } catch (err) {
+      console.error("Fetch error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (currentLoc === 'Laden...') return;
-    const parts = currentLoc.split(" ");
-    const regionKey = parts[1].charAt(0).toLowerCase() + parts[1].slice(1);
+    const regionKey = computeRegionKey(currentLoc);
 
-    const fetchHolidays = async () => {
-      try {
-        const response = await fetch(`https://opendata.rijksoverheid.nl/v1/sources/rijksoverheid/infotypes/schoolholidays/schoolyear/${year}-${year+1}?output=json`);
-        const json = await response.json();
-        const items = json?.content?.[0]?.vacations;
-        setYears(json?.content?.[0].schoolyear.trim?.());
-
-        const enrichedData = items.map(item => {
-          const startDateStr = getDateByRegion(item.regions, regionKey, 'startdate');
-          const endDateStr = getDateByRegion(item.regions, regionKey, 'enddate');
-
-          return {
-            type: item.type.trim(),
-            startDate: startDateStr ? new Date(startDateStr).toLocaleDateString('nl',
-              { year: 'numeric', month: 'long', day: 'numeric' }) : '',
-            endDate: endDateStr ? new Date(endDateStr).toLocaleDateString('nl',
-              { year: 'numeric', month: 'long', day: 'numeric' }) : '',
-          };
-        });
-
-        setHolidays(enrichedData);
-      } catch (err) {
-        console.error("Fetch error:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchHolidays();
+    fetchHolidays(yearReqHtml, regionKey);
   }, [currentLoc]);
+
+  useEffect(() => {
+    if (!selectedYear) return;
+    if (currentLoc === 'Laden...') return;
+    const regionKey = computeRegionKey(currentLoc);
+    fetchHolidays(selectedYear, regionKey);
+  }, [selectedYear, currentLoc]);
 
   const getDateByRegion = (regions, regionKey, type) => {
     return (
@@ -68,14 +88,6 @@ export default function HolidayScreen() {
       ''
     );
   };
-
-  if (isLoading) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" />
-      </View>
-    );
-  }
 
   return (
     <View style={global.uiPaddingPages}>
@@ -89,27 +101,32 @@ export default function HolidayScreen() {
           </Pressable>
         </Link>
 
+        { isLoading ? 
+          <View style={[{ paddingVertical: 16, flex: 1, justifyContent: 'center', alignItems: 'center' }, styles.absoluteOverlay]}>
+            <ActivityIndicator size="large" />
+          </View> : 
+          <></>
+        }
+
         <View style={global.default}>
           <Text>
-            {currentLoc}
+            {currentLoc || 'Laden...'}
           </Text>
 
           <SelectList
-            setSelected={years}
+            setSelected={(val) => setSelectedYear(val)}
             data={yearsJson}
             save="value"
-            // defaultOption={data.find((d) => d.value === region)}
             arrowicon={<FontAwesome name="chevron-down" size={12} color="black" />}
             search={false}
             boxStyles={{
-                // maxWidth: 400,
                 borderRadius: 8
             }}
             placeholder="Kies een schooljaar"
           />
 
           <Text style={{ fontWeight: 'bold' }}>
-            {years}
+            {years || ''}
           </Text>
 
           <View style={[isPortrait && styles.portraitWrapper]}>
@@ -146,5 +163,16 @@ const styles = StyleSheet.create({
 
   portraitBox: {
     width: '48%',
+  },
+
+  absoluteOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    height: '100%',
+    width: '100%',
+    alignContent: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
   }
 })
