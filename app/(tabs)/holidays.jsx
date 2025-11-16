@@ -22,6 +22,9 @@ export default function HolidayScreen() {
   const { year, updateYear } = useYear();
   const { fetchHolidays, computeRegionKey, isLoading, holidays, years } = useFetchHolidays();
 
+  const today = new Date();
+  const yearDefault = `${today.getFullYear()}-${today.getFullYear()+1}`;
+
   useEffect(() => {
     if (currentLoc === 'Laden...') return;
     const regionKey = computeRegionKey(currentLoc);
