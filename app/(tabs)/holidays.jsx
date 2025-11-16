@@ -6,7 +6,7 @@ import { yearsJson } from "@/constants/GlobalJson";
 import { GlobalStyles } from '@/constants/GlobalStyles';
 import { FontAwesome } from "@expo/vector-icons";
 import { Link } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { SelectList } from "react-native-dropdown-select-list";
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -17,24 +17,10 @@ export default function HolidayScreen() {
 
   const { width, height } = useWindowDimensions();
   const isPortrait = height <= width;
-
-  const [selectedYear, setSelectedYear] = useState(null);
   
   const currentLoc = useCurrentLoc();
-
   const { year, updateYear } = useYear();
-
-  const today = new Date();
-  const yearDefault = `${today.getFullYear()}-${today.getFullYear()+1}`;
-
-  const { fetchHolidays, isLoading, holidays, years } = useFetchHolidays();
-
-  const computeRegionKey = (loc) => {
-    if (!loc || loc === 'Laden...') return 'heel Nederland';
-    const parts = loc.split(" ");
-    if (!parts[1]) return 'heel Nederland';
-    return parts[1].charAt(0).toLowerCase() + parts[1].slice(1);
-  };
+  const { fetchHolidays, computeRegionKey, isLoading, holidays, years } = useFetchHolidays();
 
   useEffect(() => {
     if (currentLoc === 'Laden...') return;
@@ -91,7 +77,6 @@ export default function HolidayScreen() {
               </View>
             ))}
           </View>
-
         </View>
       </ScrollView>
     </View>

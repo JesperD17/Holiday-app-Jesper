@@ -1,11 +1,6 @@
 import { useState } from "react";
-import { useRegion } from "./RegionContext";
-import { useYear } from "./YearContext";
 
 export default function useFetchHolidays() {
-    const { year } = useYear();
-    const { region } = useRegion();
-
     const [isLoading, setLoading] = useState(true);
     const [holidays, setHolidays] = useState([]);
     const [years, setYears] = useState([])
@@ -56,6 +51,5 @@ export default function useFetchHolidays() {
             ''
         );
     };
-
     return { fetchHolidays, computeRegionKey, isLoading, holidays, years };
 }
